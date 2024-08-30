@@ -6,10 +6,12 @@ const databasePath = './database.sqlite3';
 
 async function openDatabase() {
     try {
-        return open({
+        const db = await open({
           filename: databasePath,
           driver: sqlite3.Database
         });
+        await db.run('PRAGMA foreign_keys = ON');
+        return db; 
       } catch (error) {
         console.error('Error opening database:', error);
         throw error; 
