@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '../../constants';
-
+import { User } from 'global';
 
 const checkSession = async (req: Request, res: Response) => {
   let body: User = { isAuthenticated: false };

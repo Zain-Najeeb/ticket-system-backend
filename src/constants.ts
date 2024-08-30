@@ -1,13 +1,12 @@
 export const usersTableName = 'users';
 export const analystTableName = 'analyst';
+export const ticketStatusName = 'ticket_status';
 export const requestorTableName = 'requestors';
-export const requestStatusName = 'requestStatus';
 export const ticketsTableName = 'tickets';
 export const ticketTypesTableName = 'ticket_types';
 export const applicationTicketsTableName = 'application_tickets';
 export const enhancedApplicationTicketsTableName = 'enhanced_application_tickets';
 export const newApplicationTicketsTableName = 'new_application_tickets';
-
 export const createUsersTable = `
 CREATE TABLE IF NOT EXISTS ${usersTableName} (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,7 +32,7 @@ CREATE TABLE IF NOT EXISTS ${requestorTableName} (
 );`; 
 
 export const createRequestStatusTable = `
-CREATE TABLE IF NOT EXISTS ${requestStatusName} (
+CREATE TABLE IF NOT EXISTS ${ticketStatusName} (
   id INTEGER PRIMARY KEY AUTOINCREMENT, 
   name TEXT NOT NULL, 
   status INTEGER NOT NULL
@@ -42,17 +41,15 @@ CREATE TABLE IF NOT EXISTS ${requestStatusName} (
 export const createTicketsTable = `
 CREATE TABLE IF NOT EXISTS ${ticketsTableName} (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  title TEXT NOT NULL,
-  description TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   completion_date DATETIME, 
   pref_date DATETIME NOT NULL, 
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  status_id INTEGER NOT NULL,
-  analyst_id INTEGER NOT NULL,
+  status_id INTEGER,
+  analyst_id INTEGER,
   requestor_id INTEGER NOT NULL,
   ticket_type_id INTEGER NOT NULL,
-  FOREIGN KEY (status_id) REFERENCES ${requestStatusName}(id),
+  FOREIGN KEY (status_id) REFERENCES ${ticketStatusName}(id),
   FOREIGN KEY (analyst_id) REFERENCES ${analystTableName}(id),
   FOREIGN KEY (requestor_id) REFERENCES ${requestorTableName}(id),
   FOREIGN KEY (ticket_type_id) REFERENCES ${ticketTypesTableName}(id)
@@ -77,7 +74,7 @@ export const createEnhancedApplicationTicketsTable = `
 CREATE TABLE IF NOT EXISTS ${enhancedApplicationTicketsTableName} (
   ticket_id INTEGER PRIMARY KEY,
   filename TEXT NOT NULL,
-  file_size INTEGER,
+  title TEXT NOT NULL,
   description TEXT NOT NULL,
   FOREIGN KEY (ticket_id) REFERENCES ${applicationTicketsTableName}(ticket_id)
 );`;
@@ -105,7 +102,7 @@ INSERT INTO ${requestorTableName} (username, email)
 VALUES (?, ?);`;
 
 export const insertRequestStatus = `
-INSERT INTO ${requestStatusName} (name, status)
+INSERT INTO ${ticketStatusName} (name, status)
 VALUES (?, ?);`;
 
 export const insertTicketType = `
@@ -128,12 +125,4 @@ export const ticketTypeRows = [
 ];
 
 export const saltRounds = 10; 
-
-export interface User {
-    isAuthenticated: boolean;
-    email?: string;
-    role?: string;
-    password?: string,
-    username?: string,
-  }
-  
+export const databasePath = './database.sqlite3';

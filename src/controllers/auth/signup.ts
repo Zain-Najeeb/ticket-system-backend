@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { User, saltRounds } from '../../constants';
+import { saltRounds, usersTableName } from '../../constants';
+import { User } from 'global';
 import bcrypt from 'bcrypt';
 import runQuery from '../../database/query';
 
@@ -19,7 +20,7 @@ const signUp = async (req: SignUpRequest, res: Response<SignUpResponse>) => {
   if (password) {
     try {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
-      const query = `INSERT INTO users (username, password_hash, email, role) VALUES (?, ?, ?, ?)`;
+      const query = `INSERT INTO ${usersTableName} (username, password_hash, email, role) VALUES (?, ?, ?, ?)`;
       
       await runQuery(query, [username, hashedPassword, email, role], 'INSERT');
       

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { User } from '../../constants';
+import { usersTableName } from '../../constants';
+import { User } from 'global';
 import bcrypt from 'bcrypt';
 import runQuery from '../../database/query';
 
@@ -17,7 +18,7 @@ interface LoginResponse {
 const login = async (req: LoginRequest, res: Response<LoginResponse>) => {
   let body: User = { isAuthenticated: false };
   const { email, password } = req.body;
-  const query = 'SELECT username, role, password_hash, email FROM users WHERE email = ?';
+  const query = `SELECT username, role, password_hash, email FROM ${usersTableName} WHERE email = ?`;
 
   try {
     const users = await runQuery<{ username: string; password_hash: string; role: string; email: string }>(query, [email], 'SELECT');

@@ -9,5 +9,4 @@ const logout = async (req: Request, res: Response) => {
         res.status(200).json({})
     });
 };
-
 export default logout;

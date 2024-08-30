@@ -2,7 +2,7 @@ import {
     usersTableName,
     analystTableName,
     requestorTableName,
-    requestStatusName,
+    ticketStatusName,
     ticketsTableName,
     ticketTypesTableName,
     applicationTicketsTableName,
@@ -25,6 +25,7 @@ import {
     ticketTypeRows,
     requestStatusRows,
     saltRounds, 
+    databasePath,
   } from '../constants'
   
   import sqlite3 from 'sqlite3';
@@ -100,7 +101,7 @@ import {
         return;
       }
   
-      const db = new sqlite3.Database('./database.sqlite3', (err) => {
+      const db = new sqlite3.Database(databasePath, (err) => {
         if (err) {
           console.error('Error opening database:', err.message);
         } else {
@@ -119,7 +120,7 @@ import {
         { tableName: usersTableName, query: createUsersTable, values: [username, hashedPassword, email, role], insert: insertUser },
         { tableName: analystTableName, query: createAnalystTable, values: [username, email], insert: insertAnalyst },
         { tableName: requestorTableName, query: createRequestorTable, values: [username, email], insert: insertRequestor },
-        { tableName: requestStatusName, query: createRequestStatusTable, values: requestStatusRows, insert: insertRequestStatus },
+        { tableName: ticketStatusName, query: createRequestStatusTable, values: requestStatusRows, insert: insertRequestStatus },
         { tableName: ticketTypesTableName, query: createTicketTypesTable, values: ticketTypeRows, insert: insertTicketType },
         { tableName: ticketsTableName, query: createTicketsTable },
         { tableName: applicationTicketsTableName, query: createApplicationTicketsTable },
